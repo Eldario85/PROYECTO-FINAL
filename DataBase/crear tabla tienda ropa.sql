@@ -159,8 +159,4 @@ REFERENCES Rol(id);
 
 INSERT INTO `integrador`.`rol` (`id`, `nombre`) VALUES ('1', 'Administrador');
 INSERT INTO `integrador`.`rol` (`id`, `nombre`) VALUES ('2', 'Cliente');
-ALTER TABLE Cliente
-ADD COLUMN usuarioId INT,
-ADD FOREIGN KEY (usuarioId)
-REFERENCES Usuario(id);
 
