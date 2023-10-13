@@ -61,9 +61,9 @@ clienteDb.getAll = function (funCallback) {
 
 // U = UPDATE
 // personaController --> app.put('/', actualizar);
-clienteDb.update = function (datos, apellido, funCallback) {
-    consulta = "UPDATE cliente SET nombre = ?, apellido = ?, direccion =?, telefono=?, correo_electronico=?  WHERE apellido = ?";
-    params = [datos.nombre, datos.apellido, datos.direccion, datos.telefono, datos.correo_electronico, apellido];
+clienteDb.update = function (cliente, id, funCallback) {
+    const consulta = "UPDATE cliente SET nombre =?, apellido= ?, direccion =?, telefono=?, correo_electronico=?  WHERE id = ?";
+    const params = [cliente.nombre, cliente.apellido, cliente.direccion, cliente.telefono, cliente.correo_electronico, id];
 
     connection.query(consulta, params, (err, result) => {
 
@@ -85,8 +85,8 @@ clienteDb.update = function (datos, apellido, funCallback) {
                 detail: result
             });
         } else {
-            funcallback(undefined, {
-                message: `se modificó el cliente  ${datos.nombre} ${datos.apellido}`,
+            funCallback(undefined, {
+                message: `se modificó el cliente  ${cliente.nombre} ${cliente.apellido}`,
                 detail: result
             });
         }
@@ -98,7 +98,7 @@ clienteDb.update = function (datos, apellido, funCallback) {
 // D = DELETE
 // personaController --> app.post('/', borrar);
 clienteDb.borrar = function (id, funCallback) {
-    consulta = "DELETE FROM persona WHERE dni = ?";
+    const consulta = "DELETE FROM cliente WHERE id = ?";
     connection.query(consulta, id, (err, result) => {
         if (err) {
             funCallback({ menssage: err.code, detail: err });
@@ -106,11 +106,11 @@ clienteDb.borrar = function (id, funCallback) {
             if (result.affectedRows == 0) {
                 funCallback(undefined,
                     {
-                        message: "no se encontro una persona con el dni ingresado",
+                        message: "no se encontro cliente con el id ingresado",
                         detail: result
                     });
             } else {
-                funCallback(undefined, { message: "persona eliminada", detail: result });
+                funCallback(undefined, { message: "cliente eliminado", detail: result });
             }
         }
     });
