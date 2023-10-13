@@ -14,7 +14,7 @@ var clienteDb = require("../Model/cliente");
 // -------------------------------------------------------- 
 app.get('/', BuscarTodos);
 app.post('/', crear);
-app.put('/:apellido', actualizar);
+app.put('/:id', actualizar);
 app.delete('/:id', borrar);
 app.get('/:apellido', getByApellido);
 app.get('/user/:id', getUserByCliente);
@@ -53,8 +53,8 @@ function crear(req, res) {
 //Actualizar cliente
 function actualizar(req, res) {
     let cliente = req.body;
-    let apellido = req.params.apellido;
-    clienteDb.update(cliente, apellido, (err, resultado) => {
+    let id = req.params.id;
+    clienteDb.update(cliente, id, (err, resultado) => {
         if (err) {
             res.status(500).send(err);
         } else {
@@ -66,7 +66,7 @@ function actualizar(req, res) {
 // -------------------------------------------------------- 
 //Borrar Cliente
 function borrar(req, res) {
-    let id_persona_a_eliminar = req.params.dni;
+    let id_persona_a_eliminar = req.params.id;
     clienteDb.borrar(id_persona_a_eliminar, (err, result_model) => {
         if (err) {
             res.status(500).send(err);
