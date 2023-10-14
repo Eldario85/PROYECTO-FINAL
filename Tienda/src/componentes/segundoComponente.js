@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 
 
 function PrimerComponente() {
@@ -19,7 +19,7 @@ function PrimerComponente() {
   return (
     <div style={{ ...estiloComponente, textAlign: 'center' }} className='contenedor-primercomponente'>
       <img
-        className='imagen-primerComponente imagen' /* aca se coloca el coso de las imagenes "imagen" para acomodar el tamaño*/ 
+        className='imagen-primerComponente imagen' 
         src={require('../imagenes/remera-india-negra-con-celeste1-39a19ed1a780ed311816546933537159-640-0.jpg')}
         alt='foto de una remera negra'
       />
@@ -103,4 +103,4 @@ function TercerArticulo() {
   );
 }
 
-export { PrimerComponente, SegundoArticulo, TercerArticulo };
+export { PrimerComponente, SegundoArticulo, TercerArticulo };*/
