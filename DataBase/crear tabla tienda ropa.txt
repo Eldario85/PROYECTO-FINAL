@@ -43,12 +43,6 @@ CREATE TABLE IF NOT EXISTS Producto (
     stock_disponible INT
 );
 
--- Tabla Categoria de Producto
-DROP TABLE IF EXISTS `Inegrador`.`CategoriaDeProducto` ;
-CREATE TABLE IF NOT EXISTS CategoriaDeProducto (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(30)
-);
 
 -- Tabla Pedido
 DROP TABLE IF EXISTS `Inegrador`.`Pedido` ;
@@ -77,27 +71,6 @@ CREATE TABLE IF NOT EXISTS Inventario (
     productoId INT
 );
 
--- Tabla Empleado
---DROP TABLE IF EXISTS `Inegrador`.`Empleado` ;
---CREATE TABLE IF NOT EXISTS Empleado (
---    id INT AUTO_INCREMENT PRIMARY KEY,
---    nombre VARCHAR(255),
---    apellido VARCHAR(255),
---    direccion VARCHAR(255),
---    telefono VARCHAR(20),
---    correo_electronico VARCHAR(255),
---    cargo VARCHAR(255)
---);
-
--- Tabla Proveedor
-DROP TABLE IF EXISTS `Inegrador`.`Proveedor` ;
-CREATE TABLE IF NOT EXISTS Proveedor (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_de_la_empresa VARCHAR(50),
-    nombre_del_contacto VARCHAR(50),
-    telefono_de_contacto VARCHAR(20),
-    correo_electronico_de_contacto VARCHAR(50)
-);
 
 -- Tabla Rol
 DROP TABLE IF EXISTS `Inegrador`.`Rol` ;
@@ -146,11 +119,6 @@ ADD COLUMN categoriaDeProductoId INT,
 ADD FOREIGN KEY (categoriaDeProductoId)
 REFERENCES CategoriaDeProducto(id);
 
--- Relación Empleado - Pedido
-ALTER TABLE Pedido
-ADD COLUMN empleadoId INT,
-ADD FOREIGN KEY (empleadoId)
-REFERENCES Empleado(id);
 
 -- Relación Usuario - Rol
 ALTER TABLE Usuario
@@ -163,4 +131,38 @@ ALTER TABLE Cliente
 ADD COLUMN usuarioId INT,
 ADD FOREIGN KEY (usuarioId)
 REFERENCES Usuario(id);
+
+INSERT INTO `integrador`.`usuario` (`id`, `email`, `nickname`, `password`, `rol`) VALUES ('1', 'admin@admin.com', 'admin', '1234', '1');
+
+ALTER TABLE `integrador`.`usuario` 
+DROP FOREIGN KEY `usuario_ibfk_1`,
+DROP FOREIGN KEY `usuario_ibfk_2`;
+ALTER TABLE `integrador`.`usuario` 
+CHANGE COLUMN `rol` `rol` INT NOT NULL DEFAULT 2 ,
+ADD UNIQUE INDEX `nickname_UNIQUE` (`nickname` ASC) VISIBLE;
+;
+ALTER TABLE `integrador`.`usuario` 
+ADD CONSTRAINT `usuario_ibfk_1`
+  FOREIGN KEY (`rol`)
+  REFERENCES `integrador`.`rol` (`id`),
+ADD CONSTRAINT `usuario_ibfk_2`
+  FOREIGN KEY (`rol`)
+  REFERENCES `integrador`.`rol` (`id`);
+
+ALTER TABLE Producto
+ADD FOREIGN KEY (categoriaDeProductoId)
+REFERENCES CategoriaDeProducto(id);
+
+ALTER TABLE DetalleDelPedido
+ADD FOREIGN KEY (productoId)
+REFERENCES Producto(id);
+
+ALTER TABLE DetalleDelPedido
+ADD FOREIGN KEY (pedidoId)
+REFERENCES Pedido(id);
+
+ALTER TABLE Inventario
+ADD FOREIGN KEY (productoId)
+REFERENCES Producto(id);
+
 

@@ -13,15 +13,18 @@ morgan(":method :url :status :res[content-length] - :response-time ms");
 const configuraciones = require("./config.json");
 
 const controladorCliente = require("./Controller/clienteController");
-//const controladorUsuario = require("./Controller/usuarioController");
+const controladorUsuario = require("./Controller/usuarioController");
 //const controladorProveedor = require("./Controller/proveedorController");
-//const controladorProducto = require("./Controller/productoController");
+const controladorProducto = require("./Controller/productoController");
 
+const securityController = require("./Controller/securityController");
+app.use('/security', securityController);
 
 app.use('/cliente', controladorCliente);
-//app.use('/user', controladorUsuario);
+app.use('/usuario', controladorUsuario);
 //app.use('/proveedor', controladorProveedor);
-//app.use('/producto', controladorProducto);
+app.use('/producto', controladorProducto);
+
 
 
 app.listen(configuraciones.server.port, (err) => {

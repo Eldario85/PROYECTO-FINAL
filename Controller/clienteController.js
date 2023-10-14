@@ -95,8 +95,8 @@ function getUserByCliente(req, res) {
 // -------------------------------------------------------- 
 //Buscar por apellido
 function getByApellido(req, res) {
-    let id = req.params.apellido;
-    clienteDb.getByApellido(id, (err, result_model) => {
+    let apellido = req.params.apellido;
+    clienteDb.getByApellido(apellido, (err, result_model) => {
         if (err) {
             res.status(500).send(err);
         } else {

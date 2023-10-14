@@ -18,7 +18,7 @@ var clienteDb = {};
 
 // C = CREATE
 clienteDb.create = function (datos, funCallback) {
-    consulta = "INSERT INTO cliente (id, nombre, apellido, direccion, telefono, correo_electronico, fecha_de_registro) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP);";
+    consulta = "INSERT INTO cliente (id, nombre, apellido, direccion, telefono, correo_electronico, fecha_de_registro, usuarioId) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP, 2);";
     params = [datos.id, datos.nombre, datos.apellido, datos.direccion, datos.telefono, datos.correo_electronico, datos.fecha_de_registro];
 
     connection.query(consulta, params, (err, rows) => {
@@ -118,22 +118,22 @@ clienteDb.borrar = function (id, funCallback) {
 
 
 // personaController --> app.get('/:dni', getByDNI);
-clienteDb.getByDNI = function (dni, funCallback) {
-    connection.query('SELECT * FROM persona WHERE dni = ?', dni, (err, result) => {
+clienteDb.getByApellido = function (apellido, funCallback) {
+    connection.query('SELECT * FROM cliente WHERE apellido = ?', apellido, (err, result) => {
         if (err) {
             funCallback({
-                menssage: "a ocurrido algun error inesperado al buscar la persona",
+                menssage: "a ocurrido algun error inesperado al buscar el cliente",
                 detail: err
             });
         } else if (result.length == 0) { //consulta no impacta en nada dentro de la BD
             funCallback(undefined, {
-                menssage: `no se encontro una persona con el DNI: ${dni}`,
+                menssage: `no se encontro un cliente con el apellido: ${apellido}`,
                 detail: result
             });
         } else {
 
             funCallback(undefined, {
-                menssage: `los datos de la persona con el dni ${dni} son:`,
+                menssage: `los datos del cliente con el apellido ${apellido} son:`,
                 detail: result
             });
         }
