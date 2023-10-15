@@ -9,6 +9,15 @@ export class Menu extends Component {
           className="navbar navbar-expand-lg bg-primary"
           data-bs-theme="dark"
         >
+          <a className=" navbar-brand" href="#">
+            <img
+              className="circular"
+              src="favicon.png"
+              alt=""
+              width="50"
+              height="50"
+            />
+          </a>
           <div className="container-fluid">
             <button
               className="navbar-toggler"
@@ -29,7 +38,12 @@ export class Menu extends Component {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/producto" className="nav-link">
+                  <Link to="/pedidos" className="nav-link">
+                    Pedidos
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/productos" className="nav-link">
                     Productos
                   </Link>
                 </li>
