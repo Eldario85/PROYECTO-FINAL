@@ -141,6 +141,7 @@ export class Clientes extends Component {
           <td>{cliente.direccion}</td>
           <td>{cliente.telefono}</td>
           <td>{cliente.correo_electronico}</td>
+          <td>{cliente.usuarioId}</td>
           <td>
             <Link
               to={`/clientes/edit/${cliente.id}`}
@@ -151,7 +152,7 @@ export class Clientes extends Component {
 
             <button
               className="btn btn-danger"
-              onClick={() => this.showModal(producto.id)}
+              onClick={() => this.showModal(cliente.id)}
             >
               <span className="material-symbols-outlined">delete</span>
             </button>
@@ -170,6 +171,7 @@ export class Clientes extends Component {
                 <th>Direccion</th>
                 <th>Telefono</th>
                 <th>Mail</th>
+                <th>usuarioId</th>
                 <th>Acciones</th>
               </tr>
             </thead>

@@ -1,37 +1,38 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export class InternalLogin extends Component {
-  constructor(props) {
-    super(props);
+function InternalLogin({ navigate }) {
+  const [email, setEmail] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [password, setPassword] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false); // Variable de estado para el registro
 
-    this.state = {
-      nickname: "",
-      password: "",
-    };
-  }
-
-  // handler invocado por el evento onSubmit() del formulario, aqui hay dos caminos posibles, un POST para la creacion o un PUT para la edicion
-  // eso lo diferenciamos mediante "this.props.params.vehiculo_id", acorde a su existencia debemos cambiar tanto la URL como el METHOD del fetch
-  handleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
-    let usuario = {
-      nickname: this.state.nickname,
-      password: this.state.password,
+    const usuario = {
+      email,
+      nickname,
+      password,
     };
 
-    let parametros = {
-      method: "POST",
+    const endpoint = isRegistering
+      ? "http://localhost:8000/usuario"
+      : "http://localhost:8000/security/login";
+
+    const method = isRegistering ? "POST" : "POST";
+
+    const parametros = {
+      method,
       body: JSON.stringify(usuario),
       headers: {
         "Content-Type": "application/json",
       },
     };
 
-    fetch("http://localhost:8000/security/login", parametros)
+    fetch(endpoint, parametros)
       .then((res) => {
         return res.json().then((body) => {
           return {
@@ -44,19 +45,34 @@ export class InternalLogin extends Component {
       })
       .then((result) => {
         if (result.ok) {
-          sessionStorage.setItem("token", result.body.token);
+          if (isRegistering) {
+            toast.success(`Registro exitoso. Ahora inicia sesión.`, {
+              position: "bottom-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+            setIsRegistering(false);
+          } else {
+            sessionStorage.setItem("token", result.body.token);
+            sessionStorage.setItem("usuarioId", result.body.id);
 
-          toast.success(`Bienvenido, ${usuario.nickname}`, {
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-          this.props.navigate("/");
+            toast.success(`Bienvenido, ${usuario.nickname}`, {
+              position: "bottom-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+            navigate("/");
+          }
         } else {
           toast.error(result.body.message, {
             position: "bottom-center",
@@ -84,67 +100,75 @@ export class InternalLogin extends Component {
       });
   };
 
-  handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  render() {
-    return (
-      <div className="container">
-        <div className="row">
-          <div className="col">
-            <h1>Iniciar Sesión</h1>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col">
-            <form onSubmit={this.handleSubmit}>
-              <div className="form-floating">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="nickname"
-                  onChange={this.handleChange}
-                  value={this.state.nickname}
-                  name="nickname"
-                />
-                <label htmlFor="nickname">Usuario</label>
-              </div>
-              <br />
-
-              <div className="form-floating">
-                <input
-                  type="password"
-                  className="form-control"
-                  id="password"
-                  onChange={this.handleChange}
-                  value={this.state.password}
-                  name="password"
-                />
-
-                <label htmlFor="clave">Contraseña</label>
-              </div>
-              <br />
-
-              <input
-                className="btn btn-primary"
-                type="submit"
-                value="Ingresar"
-              />
-            </form>
-          </div>
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="col">
+          <h1>{isRegistering ? "Registro de Usuario" : "Iniciar Sesión"}</h1>
         </div>
       </div>
-    );
-  }
+
+      <div className="row">
+        <div className="col">
+          <form onSubmit={handleSubmit}>
+            <div className="form-floating">
+              <input
+                type="mail"
+                className="form-control"
+                id="mail"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                name="email"
+              />
+              <label htmlFor="Email">Email</label>
+            </div>
+            <br />
+            <div className="form-floating">
+              <input
+                type="text"
+                className="form-control"
+                id="nickname"
+                onChange={(e) => setNickname(e.target.value)}
+                value={nickname}
+                name="nickname"
+              />
+              <label htmlFor="nickname">Usuario</label>
+            </div>
+            <br />
+
+            <div className="form-floating">
+              <input
+                type="password"
+                className="form-control"
+                id="password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                name="password"
+              />
+              <label htmlFor="clave">Contraseña</label>
+            </div>
+            <br />
+
+            <button type="submit" className="btn btn-primary">
+              {isRegistering ? "Registrarse" : "Ingresar"}
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setIsRegistering(!isRegistering)}
+            >
+              {isRegistering ? "Iniciar Sesión" : "Registrarse"}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default Login;
-
-export function Login() {
+function Login() {
   const p = useParams();
-
   const navigate = useNavigate();
 
   return (
@@ -153,3 +177,5 @@ export function Login() {
     </>
   );
 }
+
+export default Login;

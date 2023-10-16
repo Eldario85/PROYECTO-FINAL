@@ -18,7 +18,7 @@ var clienteDb = {};
 // C = CREATE
 clienteDb.create = function (datos, funCallback) {
   consulta =
-    "INSERT INTO cliente (id, nombre, apellido, direccion, telefono, correo_electronico, fecha_de_registro, usuarioId) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP, 2);";
+    "INSERT INTO cliente (id, nombre, apellido, direccion, telefono, correo_electronico, fecha_de_registro, usuarioId) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP, ?);";
   params = [
     datos.id,
     datos.nombre,
@@ -27,6 +27,7 @@ clienteDb.create = function (datos, funCallback) {
     datos.telefono,
     datos.correo_electronico,
     datos.fecha_de_registro,
+    datos.usuarioId,
   ];
 
   connection.query(consulta, params, (err, rows) => {

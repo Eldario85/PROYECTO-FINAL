@@ -13,7 +13,7 @@ const securityController = require("./securityController");
 // --------------------------------------------------------
 
 app.get("/", securityController.verificarToken, getAll);
-app.post("/", securityController.verificarToken, createUser);
+app.post("/", createUser);
 app.put("/:id_usuario", updateUser);
 app.delete("/:id_usuario", deleteUser);
 

@@ -13,6 +13,7 @@ export class Internal_Clientes_Edit extends Component {
       direccion: "",
       telefono: "",
       correo_electronico: "",
+      usuarioId: sessionStorage.getItem("id"),
       modal: false,
     };
   }
@@ -51,6 +52,7 @@ export class Internal_Clientes_Edit extends Component {
               direccion: result.body.detail.direccion,
               telefono: result.body.detail.telefono,
               correo_electronico: result.body.detail.correo_electronico,
+              usuarioId: sessionStorage.getItem("id"),
             });
           } else {
             toast.error(result.body.message, {
@@ -83,11 +85,12 @@ export class Internal_Clientes_Edit extends Component {
       direccion: this.state.direccion,
       telefono: this.state.telefono,
       correo_electronico: this.state.correo_electronico,
+      usuarioId: sessionStorage.getItem("id"),
     };
 
     let parametros = {
       method: this.props.params.id ? "PUT" : "POST",
-      body: JSON.stringify(producto),
+      body: JSON.stringify(cliente),
       headers: {
         "Content-Type": "application/json",
       },
@@ -224,7 +227,21 @@ export class Internal_Clientes_Edit extends Component {
                   name="correo_electronico"
                 />
 
-                <label htmlFor="telefono">Email</label>
+                <label htmlFor="correo_electronico">Email</label>
+              </div>
+              <br />
+
+              <div className="form-floating disabled">
+                <input
+                  type="usuarioId"
+                  className="form-control"
+                  id="floatingUsuarioId"
+                  placeholder="usuarioId"
+                  value={sessionStorage.getItem("id")}
+                  name="usuarioId"
+                />
+
+                <label htmlFor="usuarioId">Usuario Id</label>
               </div>
               <br />
 

@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
-
+import Image from "react-bootstrap/Image";
 /*
 si no tengo token ===>  null
 si tnego pero esa vacio ===> ""
@@ -40,10 +40,10 @@ function Menu() {
           data-bs-theme="dark"
         >
           <a className=" navbar-brand" href="#">
-            <img
+            <Image
               className="circular"
               src="faviconfutbol.ico.jpg"
-              alt=""
+              roundedCircle
               width="50"
               height="50"
             />
@@ -115,6 +115,7 @@ function Menu() {
             <img
               className="circular"
               src="faviconfutbol.ico.jpg"
+              rounded
               alt=""
               width="50"
               height="50"
@@ -141,7 +142,7 @@ function Menu() {
                 <li className="nav-item">
                   <Link to="/login" className="nav-link">
                     {" "}
-                    Login
+                    Login / Registrarse
                   </Link>
                 </li>
               </ul>
