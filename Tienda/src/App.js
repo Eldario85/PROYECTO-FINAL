@@ -18,10 +18,7 @@ function App() {
           <Route path="/productos" element={<Productos />}></Route>
           <Route path="/login" element={<Login />}></Route>
           {/* <Route path="/reservas" element={<Reservas />}></Route>
-          {/*<Route path="/texto/:text" element={<Texto />} />
-          <Route path="/reloj" element={<Clock />} />
-          <Route path="/boton" element={<Toggle />} />
-          <Route path="/hook" element={<ComponenteClass />} />*/}
+           */}
           <Route path="/productos/edit" element={<Productos_Edit />} />
           <Route
             path="/productos/edit/:producto_id"

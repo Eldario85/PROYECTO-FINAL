@@ -5,14 +5,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 var productoDb = require("../Model/producto");
-
+const securityController = require("./securityController");
 // --------------------------------------------------------
 // --rutas de escucha (endpoint) dispoibles para PERSONAS--
 // --------------------------------------------------------
 app.get("/", BuscarTodos);
-app.post("/", crear);
-app.put("/:id", actualizar);
-app.delete("/:id", borrar);
+app.post("/", securityController.verificarToken, crear);
+app.put("/:id", securityController.verificarToken, actualizar);
+app.delete("/:id", securityController.verificarToken, borrar);
 app.get("/:id", getById);
 
 // --------------------------------------------------------

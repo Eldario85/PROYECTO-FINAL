@@ -9,7 +9,7 @@ export class InternalLogin extends Component {
 
     this.state = {
       nickname: "",
-      clave: "",
+      password: "",
     };
   }
 
@@ -20,7 +20,7 @@ export class InternalLogin extends Component {
 
     let usuario = {
       nickname: this.state.nickname,
-      clave: this.state.clave,
+      password: this.state.password,
     };
 
     let parametros = {
@@ -117,10 +117,10 @@ export class InternalLogin extends Component {
                 <input
                   type="password"
                   className="form-control"
-                  id="clave"
+                  id="password"
                   onChange={this.handleChange}
-                  value={this.state.clave}
-                  name="clave"
+                  value={this.state.password}
+                  name="password"
                 />
 
                 <label htmlFor="clave">Contraseña</label>

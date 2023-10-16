@@ -8,9 +8,9 @@ export class Internal_Productos_Edit extends Component {
     super(props);
 
     this.state = {
-      producto: "",
+      nombre: "",
       descripcion: "",
-      precio: "",
+      precio: null,
       modal: false,
     };
   }
@@ -25,7 +25,7 @@ export class Internal_Productos_Edit extends Component {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
+          //Accept: "application/json",
           // 'authorization': sessionStorage.getItem('token')
         },
       };

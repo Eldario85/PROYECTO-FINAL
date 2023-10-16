@@ -84,7 +84,7 @@ export class Productos extends Component {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",
+        // Accept: "application/json",
       },
     };
     //this.state.idToDelete se carga cuando abrimos el modal con showModal(vehiculo_id)

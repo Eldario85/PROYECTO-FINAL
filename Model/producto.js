@@ -149,7 +149,7 @@ productoDb.getById = function (id, funCallback) {
     } else {
       funCallback(undefined, {
         menssage: `los datos del producto con el id ${id} son:`,
-        detail: result,
+        detail: result[0],
       });
     }
   });
