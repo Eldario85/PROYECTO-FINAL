@@ -46,7 +46,7 @@ export class InternalLogin extends Component {
         if (result.ok) {
           sessionStorage.setItem("token", result.body.token);
 
-          toast.success("bienvenido", {
+          toast.success(`Bienvenido, ${usuario.nickname}`, {
             position: "bottom-center",
             autoClose: 5000,
             hideProgressBar: false,

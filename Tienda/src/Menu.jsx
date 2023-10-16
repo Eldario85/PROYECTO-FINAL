@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { useEffect, useState } from "react";
+import Button from "react-bootstrap/Button";
 
 /*
 si no tengo token ===>  null
@@ -26,7 +27,7 @@ function Menu() {
   function logout() {
     sessionStorage.removeItem("token");
     setToken("");
-    // navigate("/");
+    navigate("/");
   }
 
   // const token = sessionStorage.getItem('token')
@@ -47,12 +48,12 @@ function Menu() {
               height="50"
             />
           </a>
-          <div className="container-fluid">
+          <div className="container">
             <Link to="/" className="nav-link">
               {" "}
               Home
             </Link>
-            <button
+            <Button
               className="navbar-toggler"
               type="button"
               data-bs-toggle="collapse"
@@ -62,7 +63,7 @@ function Menu() {
               aria-label="Toggle navigation"
             >
               <span className="navbar-toggler-icon"></span>
-            </button>
+            </Button>
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav">
                 <li className="nav-item">
@@ -77,16 +78,25 @@ function Menu() {
                     Pedidos
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link to="/clientes" className="nav-link">
+                    {" "}
+                    Clientes
+                  </Link>
+                </li>
 
                 <li className="nav-item">
-                  <button
+                  <Button
                     className="btn btn-outline-danger btn-sm"
                     onClick={() => logout()}
                   >
                     <span className="material-symbols-outlined">logout</span>
-                  </button>
+                  </Button>
 
-                  {/* <Link to="/login" className='nav-link'> Login</Link> */}
+                  {/* <Link to="/login" className="nav-link">
+                    {" "}
+                    Login
+                  </Link> */}
                 </li>
               </ul>
             </div>
@@ -101,6 +111,15 @@ function Menu() {
           className="navbar navbar-expand-lg bg-primary"
           data-bs-theme="dark"
         >
+          <a className=" navbar-brand" href="#">
+            <img
+              className="circular"
+              src="faviconfutbol.ico.jpg"
+              alt=""
+              width="50"
+              height="50"
+            />
+          </a>
           <div className="container">
             <Link to="/" className="nav-link">
               {" "}

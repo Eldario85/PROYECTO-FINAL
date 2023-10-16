@@ -6,6 +6,9 @@ import Home from "./Home";
 import Login from "./Login";
 import Productos from "./componentes/Productos";
 import Productos_Edit from "./componentes/Productos_Edit";
+import Clientes_Edit from "./componentes/clientes_Edit";
+import Clientes from "./componentes/clientes";
+
 function App() {
   return (
     <>
@@ -17,8 +20,8 @@ function App() {
 
           <Route path="/productos" element={<Productos />}></Route>
           <Route path="/login" element={<Login />}></Route>
-          {/* <Route path="/reservas" element={<Reservas />}></Route>
-           */}
+          <Route path="/clientes/edit" element={<Clientes_Edit />}></Route>
+          <Route path="/clientes" element={<Clientes />}></Route>
           <Route path="/productos/edit" element={<Productos_Edit />} />
           <Route
             path="/productos/edit/:producto_id"
