@@ -59,7 +59,7 @@ function InternalLogin({ navigate }) {
             setIsRegistering(false);
           } else {
             sessionStorage.setItem("token", result.body.token);
-            sessionStorage.setItem("usuarioId", result.body.id);
+            //sessionStorage.setItem("usuarioId", result.body.id);
 
             toast.success(`Bienvenido, ${usuario.nickname}`, {
               position: "bottom-center",
