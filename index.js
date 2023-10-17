@@ -1,9 +1,9 @@
-require('rootpath')();
+require("rootpath")();
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
-var cors = require('cors')
-app.use(cors())
+var cors = require("cors");
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -18,20 +18,19 @@ const controladorUsuario = require("./Controller/usuarioController");
 const controladorProducto = require("./Controller/productoController");
 
 const securityController = require("./Controller/securityController");
-app.use('/security', securityController);
+app.use("/security", securityController.app);
 
-app.use('/cliente', controladorCliente);
-app.use('/usuario', controladorUsuario);
+app.use("/cliente", controladorCliente);
+app.use("/usuario", controladorUsuario);
 //app.use('/proveedor', controladorProveedor);
-app.use('/producto', controladorProducto);
-
-
+app.use("/producto", controladorProducto);
 
 app.listen(configuraciones.server.port, (err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("servidor escuchando en el puerto "+ configuraciones.server.port);
-    }
-  });
-  
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(
+      "servidor escuchando en el puerto " + configuraciones.server.port
+    );
+  }
+});

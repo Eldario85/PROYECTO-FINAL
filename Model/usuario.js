@@ -1,16 +1,15 @@
-require('rootpath')();
-const mysql = require('mysql');
+require("rootpath")();
+const mysql = require("mysql");
 const configuracion = require("config.json");
-const bcrypt = require('bcrypt');
-
+const bcrypt = require("bcrypt");
 
 var connection = mysql.createConnection(configuracion.database);
 connection.connect((err) => {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log("base de datos conectada");
-    }
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("base de datos conectada");
+  }
 });
 
 var usuarioDb = {};
@@ -26,135 +25,152 @@ funCallback: en una funcion que la enviamos desde el endpoint del controlador, e
 // C = CREATE
 // usuarioController --> app.post('/', createUser);
 usuarioDb.create = function (usuario, funcallback) {
-    // req.body = usuario   ---> req.body.clave
-    let claveCifrada = bcrypt.hashSync(usuario.password, 10);
-
-    consulta = "INSERT INTO usuario (email, nickname, password) VALUES (?,?,?);";
-    params = [usuario.email, usuario.nickname, claveCifrada];
-    connection.query(consulta, params, (err, detail_bd) => {
-        if (err) {
-
-            if (err.code == "ER_DUP_ENTRY") {
-                funcallback({
-                    message: "el usuario ya fue registrado",
-                    detalle: err
-                });
-            } else {
-                funcallback({
-                    message: "error diferente",
-                    detalle: err
-                });
-            }
-        } else {
-
-            funcallback(undefined, {
-                message: "se creo el usaurio " + usuario.nickname,
-                detalle: detail_bd
-            });
-        }
+  // Verifica que los campos requeridos no estén vacíos
+  if (!usuario.email || !usuario.nickname || !usuario.password) {
+    return funcallback({
+      message: "Todos los campos son obligatorios.",
     });
-}
+  }
+
+  // Hashea la contraseña
+  let claveCifrada = bcrypt.hashSync(usuario.password, 10);
+
+  // Realiza la inserción en la base de datos
+  consulta = "INSERT INTO usuario (email, nickname, password) VALUES (?,?,?);";
+  params = [usuario.email, usuario.nickname, claveCifrada];
+  connection.query(consulta, params, (err, detail_bd) => {
+    if (err) {
+      if (err.code == "ER_DUP_ENTRY") {
+        funcallback({
+          message: "El usuario ya fue registrado",
+          detalle: err,
+        });
+      } else {
+        funcallback({
+          message: "Error diferente",
+          detalle: err,
+        });
+      }
+    } else {
+      funcallback(undefined, {
+        message: "Se creó el usuario " + usuario.nickname,
+        detalle: detail_bd,
+      });
+    }
+  });
+};
 
 // -----------------------------------------------------------------------------
 
 //R = READ
 // usuarioController --> app.get('/', getAll);
 usuarioDb.getAll = function (funCallback) {
-    var consulta = 'SELECT * FROM usuario';
-    connection.query(consulta, function (err, rows) {
-        if (err) {
-            funCallback(err);
-            return;
-        } else {
-            funCallback(undefined, rows);
-        }
-    });
-}
+  var consulta = "SELECT * FROM usuario";
+  connection.query(consulta, function (err, rows) {
+    if (err) {
+      funCallback(err);
+      return;
+    } else {
+      funCallback(undefined, rows);
+    }
+  });
+};
 
 // -----------------------------------------------------------------------------
 
 //U = UPDATE
 // usuarioController --> app.put('/:id_usuario', updateUser);
 usuarioDb.update = function (datos_usuario, id_usaurio, funcallback) {
-    let claveCifrada = bcrypt.hashSync(datos_usuario.clave, 10);
+  let claveCifrada = bcrypt.hashSync(datos_usuario.clave, 10);
 
-   const params = [datos_usuario.email, datos_usuario.nickname, claveCifrada, id_usaurio]
-   const consulta = "UPDATE usuario set email = ?, nickname = ?, password = ? WHERE id = ?;";
+  const params = [
+    datos_usuario.email,
+    datos_usuario.nickname,
+    claveCifrada,
+    id_usaurio,
+  ];
+  const consulta =
+    "UPDATE usuario set email = ?, nickname = ?, password = ? WHERE id = ?;";
 
-    connection.query(consulta, params, (err, result) => {
-        if (err) {
-            if (err.code = "ER_TRUNCATED_WRONG_VALUE") {
-                funcallback({
-                    message: `el id de usuario es incorrecto, se espera un numero entero`,
-                    detail: err
-                });
-            } else {
-                funcallback({
-                    message: `error desconocido`,
-                    detail: err
-                });
-            }
-        } else {
-            if (result.affectedRows == 0) {
-                funcallback({
-                    message: "No existe un usuario que coincida con el criterio de busqueda",
-                    detail: result
-                });
-            } else {
-                funcallback(undefined, {
-                    message: `se actualizaron los datos del usuario ${id}`,
-                    detail: result
-                });
-            }
-        }
-    });
-}
+  connection.query(consulta, params, (err, result) => {
+    if (err) {
+      if ((err.code = "ER_TRUNCATED_WRONG_VALUE")) {
+        funcallback({
+          message: `el id de usuario es incorrecto, se espera un numero entero`,
+          detail: err,
+        });
+      } else {
+        funcallback({
+          message: `error desconocido`,
+          detail: err,
+        });
+      }
+    } else {
+      if (result.affectedRows == 0) {
+        funcallback({
+          message:
+            "No existe un usuario que coincida con el criterio de busqueda",
+          detail: result,
+        });
+      } else {
+        funcallback(undefined, {
+          message: `se actualizaron los datos del usuario ${id}`,
+          detail: result,
+        });
+      }
+    }
+  });
+};
 
 // -----------------------------------------------------------------------------
 
 // D = DELETE
 // usuarioController --> app.delete('/:id_usuario', deleteUser);
 usuarioDb.borrar = function (id, funCallback) {
-    consulta = "DELETE FROM USUARIO WHERE id = ?";
-    connection.query(consulta, id, (err, result) => {
-        if (err) {
-            funCallback({ menssage: err.code, detail: err }, undefined);
-
-        } else {
-
-            if (result.affectedRows == 0) {
-                funCallback(undefined, { message: "no se encontro el usaurio, ingrese otro id", detail: result });
-            } else {
-                funCallback(undefined, { message: "usuario eliminado", detail: result });
-            }
-        }
-    });
-}
+  consulta = "DELETE FROM USUARIO WHERE id = ?";
+  connection.query(consulta, id, (err, result) => {
+    if (err) {
+      funCallback({ menssage: err.code, detail: err }, undefined);
+    } else {
+      if (result.affectedRows == 0) {
+        funCallback(undefined, {
+          message: "no se encontro el usaurio, ingrese otro id",
+          detail: result,
+        });
+      } else {
+        funCallback(undefined, {
+          message: "usuario eliminado",
+          detail: result,
+        });
+      }
+    }
+  });
+};
 
 // -----------------------------------------------------------------------------
 
 //securityController --> app.post('/login', login);
 usuarioDb.findByNickname = function (nickname, funCallback) {
-    var consulta = "SELECT * FROM usuario WHERE nickname = ?";
-    connection.query(consulta, nickname, function (err, result) {
-        if (err) {
-            funCallback(err);
-            return;
-        } else {
-
-            if (result.length > 0) {
-                funCallback(undefined, {
-                    message: `Usuario encontrado`,
-                    detail: result[0]
-                });
-            } else {
-                funCallback({
-                    message: "No existe un usuario que coincida con el criterio de busqueda",
-                    detail: result
-                });
-            }
-        }
-    });
-}
+  var consulta = "SELECT * FROM usuario WHERE nickname = ?";
+  connection.query(consulta, nickname, function (err, result) {
+    if (err) {
+      funCallback(err);
+      return;
+    } else {
+      if (result.length > 0) {
+        funCallback(undefined, {
+          message: `Usuario encontrado`,
+          detail: result[0],
+        });
+      } else {
+        funCallback({
+          message:
+            "No existe un usuario que coincida con el criterio de busqueda",
+          detail: result,
+        });
+      }
+    }
+  });
+};
 
 module.exports = usuarioDb;
