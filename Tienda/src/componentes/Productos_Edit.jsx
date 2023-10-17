@@ -11,6 +11,7 @@ export class Internal_Productos_Edit extends Component {
       nombre: "",
       descripcion: "",
       precio: null,
+      imagen: "",
       modal: false,
     };
   }
@@ -25,8 +26,8 @@ export class Internal_Productos_Edit extends Component {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          //Accept: "application/json",
-          // 'authorization': sessionStorage.getItem('token')
+          Accept: "application/json",
+          authorization: sessionStorage.getItem("token"),
         },
       };
 
@@ -50,6 +51,7 @@ export class Internal_Productos_Edit extends Component {
               nombre: result.body.detail.nombre,
               descripcion: result.body.detail.descripcion,
               precio: result.body.detail.precio,
+              imagen: result.body.detail.imagen,
             });
           } else {
             toast.error(result.body.message, {
@@ -80,6 +82,7 @@ export class Internal_Productos_Edit extends Component {
       nombre: this.state.nombre,
       descripcion: this.state.descripcion,
       precio: this.state.precio,
+      imagen: this.state.imagen,
     };
 
     let parametros = {
@@ -192,6 +195,21 @@ export class Internal_Productos_Edit extends Component {
                 />
 
                 <label htmlFor="precio">Precio</label>
+              </div>
+              <br />
+
+              <div className="form-floating">
+                <input
+                  type="url"
+                  className="form-control"
+                  id="imagen"
+                  placeholder="Imagen"
+                  onChange={this.handleChange}
+                  value={this.state.imagen}
+                  name="imagen"
+                />
+
+                <label htmlFor="imagen">Imagen</label>
               </div>
               <br />
 
