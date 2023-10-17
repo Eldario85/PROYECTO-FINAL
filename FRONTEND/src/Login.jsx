@@ -7,7 +7,7 @@ function InternalLogin({ navigate }) {
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
-  const [isRegistering, setIsRegistering] = useState(false); // Variable de estado para el registro
+  const [estaRegistrado, setEstaRegistrado] = useState(false); // Variable de estado para el registro
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -18,11 +18,11 @@ function InternalLogin({ navigate }) {
       password,
     };
 
-    const endpoint = isRegistering
+    const endpoint = estaRegistrado
       ? "http://localhost:8000/usuario"
       : "http://localhost:8000/security/login";
 
-    const method = isRegistering ? "POST" : "POST";
+    const method = estaRegistrado ? "POST" : "POST";
 
     const parametros = {
       method,
@@ -45,7 +45,7 @@ function InternalLogin({ navigate }) {
       })
       .then((result) => {
         if (result.ok) {
-          if (isRegistering) {
+          if (estaRegistrado) {
             toast.success(`Registro exitoso. Ahora inicia sesión.`, {
               position: "bottom-center",
               autoClose: 5000,
@@ -56,7 +56,7 @@ function InternalLogin({ navigate }) {
               progress: undefined,
               theme: "light",
             });
-            setIsRegistering(false);
+            setEstaRegistrado(false);
           } else {
             sessionStorage.setItem("token", result.body.token);
             //sessionStorage.setItem("usuarioId", result.body.id);
@@ -104,7 +104,7 @@ function InternalLogin({ navigate }) {
     <div className="container">
       <div className="row">
         <div className="col">
-          <h1>{isRegistering ? "Registro de Usuario" : "Iniciar Sesión"}</h1>
+          <h1>{estaRegistrado ? "Registro de Usuario" : "Iniciar Sesión"}</h1>
         </div>
       </div>
 
@@ -113,9 +113,9 @@ function InternalLogin({ navigate }) {
           <form onSubmit={handleSubmit}>
             <div className="form-floating">
               <input
-                type="mail"
+                type="email"
                 className="form-control"
-                id="mail"
+                id="email"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 name="email"
@@ -145,20 +145,20 @@ function InternalLogin({ navigate }) {
                 value={password}
                 name="password"
               />
-              <label htmlFor="clave">Contraseña</label>
+              <label htmlFor="password">Contraseña</label>
             </div>
             <br />
 
             <button type="submit" className="btn btn-primary">
-              {isRegistering ? "Registrarse" : "Ingresar"}
+              {estaRegistrado ? "Registrarse" : "Ingresar"}
             </button>
 
             <button
               type="button"
               className="btn btn-secondary"
-              onClick={() => setIsRegistering(!isRegistering)}
+              onClick={() => setEstaRegistrado(!estaRegistrado)}
             >
-              {isRegistering ? "Iniciar Sesión" : "Registrarse"}
+              {estaRegistrado ? "Iniciar Sesión" : "Registrarse"}
             </button>
           </form>
         </div>
