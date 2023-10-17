@@ -4,6 +4,10 @@ import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
+import Card from "react-bootstrap/Card";
+import Placeholder from "react-bootstrap/Placeholder";
+import { CardBody } from "react-bootstrap";
+
 export class Productos extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +29,7 @@ export class Productos extends Component {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        // authorization: sessionStorage.getItem("token"),
+        authorization: sessionStorage.getItem("token"),
       },
     };
 
@@ -133,44 +137,36 @@ export class Productos extends Component {
   }
 
   render() {
-    const filas = this.state.productos.map((producto, index) => {
-      return (
-        <tr key={index}>
-          <td>{producto.nombre}</td>
-          <td>{producto.descripcion}</td>
-          <td>{producto.precio}</td>
-          <td>
-            <Link
-              to={`/productos/edit/${producto.id}`}
-              className="btn btn-primary"
-            >
-              <span class="material-symbols-outlined">edit</span>
-            </Link>
+    const cards = this.state.productos.map((producto, index) => (
+      <div key={index} class="d-flex justify-content-around">
+        <Card style={{ width: "18rem" }}>
+          <Card.Img variant="top" src={producto.imagen} />
+          <Card.Body>
+            <Card.Title>{producto.nombre}</Card.Title>
+            <Card.Text>{producto.descripcion}</Card.Text>
+            <Card.Text>Precio: $ {producto.precio}</Card.Text>
+            <Button variant="primary">Go somewhere</Button>
+          </Card.Body>
+          <Link
+            to={`/productos/edit/${producto.id}`}
+            className="btn btn-primary"
+          >
+            <span className="material-symbols-outlined">edit</span>
+          </Link>
+          <button
+            className="btn btn-danger"
+            onClick={() => showModal(producto.id)}
+          >
+            <span className="material-symbols-outlined">delete</span>
+          </button>
+        </Card>
+      </div>
+    ));
 
-            <button
-              className="btn btn-danger"
-              onClick={() => this.showModal(producto.id)}
-            >
-              <span className="material-symbols-outlined">delete</span>
-            </button>
-          </td>
-        </tr>
-      );
-    });
     return (
       <>
-        <div>
-          <table className="table  table-striped">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Descripcion</th>
-                <th>Precio</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>{filas}</tbody>
-          </table>
+        <div className="d-flex justify-content-around">
+          {cards}
           <br />
           <Link to="/productos/edit" className="btn btn-info">
             Nuevo Producto
@@ -179,7 +175,7 @@ export class Productos extends Component {
 
         <Modal show={this.state.modal} onHide={this.closeModal}>
           <Modal.Header closeButton>
-            <Modal.Title>Confirmación de Eliminacion</Modal.Title>
+            <Modal.Title>Confirmación de Eliminación</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             ¿Está seguro de eliminar el producto seleccionado?
@@ -197,5 +193,4 @@ export class Productos extends Component {
     );
   }
 }
-
 export default Productos;

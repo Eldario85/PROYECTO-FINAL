@@ -10,7 +10,7 @@ const securityController = require("./securityController");
 // --rutas de escucha (endpoint) dispoibles para PERSONAS--
 // --------------------------------------------------------
 app.get("/", BuscarTodos);
-app.post("/", securityController.verificarToken, crear);
+app.post("/", crear);
 app.put("/:id", securityController.verificarToken, actualizar);
 app.delete("/:id", securityController.verificarToken, borrar);
 app.get("/:id", getById);
