@@ -4,13 +4,12 @@ import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-class Clientes extends Component {
+class Pedidos extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      clientes: [],
-      //cliente: props.location.state.cliente,
+      Pedidos: [],
     
     };
     
@@ -25,7 +24,7 @@ class Clientes extends Component {
       },
     };
 
-    fetch("http://localhost:8000/cliente", parametros)
+    fetch("http://localhost:8000/pedido", parametros)
       .then((res) =>
         res.json().then((body) => ({
           status: res.status,
@@ -37,8 +36,8 @@ class Clientes extends Component {
       .then((result) => {
         if (result.ok) {
           this.setState({
-            clientes: result.body,
-            modal: false,
+            pedidos: result.body,
+            
           });
         } else {
           toast.error(result.body.message, {
@@ -59,19 +58,19 @@ class Clientes extends Component {
  
 
   render() {
-    const filas = this.state.clientes.map((cliente, index) => (
+    const filas = this.state.Pedidos.map((pedido, index) => (
       <tr key={index}>
-        <td>{cliente.nombre}</td>
-        <td>{cliente.apellido}</td>
-        <td>{cliente.direccion}</td>
-        <td>{cliente.telefono}</td>
-        <td>{cliente.correo_electronico}</td>
-        <td>{cliente.usuarioId}</td>
+        <td>{pedido.id}</td>
+        <td>{pedido.cantidad}</td>
+        <td>{pedido.talla}</td>
+        <td>{pedido.precio_unitario}</td>
+        <td>{pedido.fecha_del_pedido}</td>
+     
         <td>
           <Link
             to={{
-              pathname: `/clientes/edit/${cliente.id}`,
-              state: { cliente },
+              pathname: `/pedidos/edit/${pedido.id}`,
+              state: { pedido },
             }}
             className="btn btn-primary"
           >
@@ -88,20 +87,20 @@ class Clientes extends Component {
           <table className="table  table-striped">
             <thead>
               <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Direccion</th>
-                <th>Telefono</th>
-                <th>Mail</th>
-                <th>usuarioId</th>
+                <th>ID</th>
+                <th>Cantidad</th>
+                <th>Talla</th>
+                <th>Precio Unitario</th>
+                <th>Fecha del pedido</th>
+            
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>{filas}</tbody>
           </table>
           <br />
-          <Link to="/clientes/edit" className="btn btn-info">
-            Nuevo Cliente
+          <Link to="/pedido/edit" className="btn btn-info">
+            Nuevo Pedido
           </Link>
         </div>
 
@@ -111,4 +110,4 @@ class Clientes extends Component {
   }
 }
 
-export default Clientes;
+export default Pedidos;

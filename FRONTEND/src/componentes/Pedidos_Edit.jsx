@@ -2,20 +2,18 @@ import React, { Component } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import clientes from "./clientes";
 
-export class Internal_Clientes_Edit extends Component {
+
+export class Internal_Pedidos_Edit extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       id: "",
-      nombre: "",
-      apellido: "",
-      direccion: "",
-      telefono: "",
-      correo_electronico: "",
-      usuarioId: "",
+      cantidad: "",
+      talla: "",
+      precio_unitario: "",
+      fecha_del_pedido: "",
      
       modal: false,
     };
@@ -27,16 +25,16 @@ export class Internal_Clientes_Edit extends Component {
   // modificado si es que viene dicho dato por parametro
   componentDidMount() {
     if (this.props.params.id) {
-      this.fetchCliente(this.props.params.id);
+      this.fetchPedido(this.props.params.id);
     }
   }
 
-  fetchCliente = (id) => {
-    fetch(`http://localhost:8000/cliente/${id}`, {
+  fetchPedido = (id) => {
+    fetch(`http://localhost:8000/pedido/${id}`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        authorization: sessionStorage.getItem("token"),
+        //authorization: sessionStorage.getItem("token"),
       },
     })
       .then((res) => res.json())
@@ -44,12 +42,12 @@ export class Internal_Clientes_Edit extends Component {
       .then((result) => {
         if (result.ok) {
           this.setState({
-            nombre: result.body.detail.nombre,
-            apellido: result.body.detail.apellido,
-            direccion: result.body.detail.direccion,
-            telefono: result.body.detail.telefono,
-            correo_electronico: result.body.detail.correo_electronico,
-            usuarioId: result.body.detail.usuarioId,
+            id: result.body.detail.id,
+            cantidad: result.body.detail.cantidad,
+            talla: result.body.detail.talla,
+            precio_unitario: result.body.detail.precio_unitario,
+            fecha_del_pedido: result.body.detail.fecha_del_pedido,
+            
           });
         } else {
           toast.error(result.body.message, {
@@ -75,16 +73,16 @@ export class Internal_Clientes_Edit extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    const { id, ...cliente } = this.state;
+    const { id, ...Pedidos } = this.state;
 
     const method = id ? "PUT" : "POST";
     const url = id
-      ? `http://localhost:8000/cliente/${id}`
-      : "http://localhost:8000/cliente";
+      ? `http://localhost:8000/pedido/${id}`
+      : "http://localhost:8000/pedido";
 
     fetch(url, {
       method,
-      body: JSON.stringify(cliente),
+      body: JSON.stringify(Pedidos),
       headers: {
         "Content-Type": "application/json",
       },
@@ -102,7 +100,7 @@ export class Internal_Clientes_Edit extends Component {
             progress: undefined,
             theme: "light",
           });
-          this.props.navigate("/clientes");
+          this.props.navigate("/pedido");
         } else {
           toast.error(result.body.message, {
             position: "bottom-center",
@@ -132,8 +130,8 @@ export class Internal_Clientes_Edit extends Component {
           <div className="col">
             <h1>
               {this.props.params.id
-                ? `Edicion del Cliente ${this.props.params.id}`
-                : "Alta del Cliente"}
+                ? `Edicion del Pedido ${this.props.params.id}`
+                : "Alta del Pedido"}
             </h1>
           </div>
         </div>
@@ -143,90 +141,60 @@ export class Internal_Clientes_Edit extends Component {
             <form onSubmit={this.handleSubmit}>
               <div className="form-floating">
                 <input
-                  type="text"
-                  className="form-control"
-                  id="floatingNombre"
-                  placeholder="Nombre"
-                  onChange={this.handleChange}
-                  value={this.state.nombre}
-                  name="nombre"
-                />
-                <label htmlFor="floatingNombre">Nombre</label>
-              </div>
-              <br />
-              <div className="form-floating">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="floatingApellido"
-                  placeholder="Apellido"
-                  onChange={this.handleChange}
-                  value={this.state.apellido}
-                  name="apellido"
-                />
-                <label htmlFor="floatingApellido">Apellido</label>
-              </div>
-              <br />
-
-              <div className="form-floating">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="direccion"
-                  placeholder="Direccion"
-                  onChange={this.handleChange}
-                  value={this.state.direccion}
-                  name="direccion"
-                />
-
-                <label htmlFor="direccion">Direccion</label>
-              </div>
-              <br />
-
-              <div className="form-floating">
-                <input
                   type="number"
                   className="form-control"
-                  id="telefono"
-                  placeholder="telefono"
+                  id="floatingCantidad"
+                  placeholder="Cantidad"
                   onChange={this.handleChange}
-                  value={this.state.telefono}
-                  name="telefono"
+                  value={this.state.cantidad}
+                  name="cantidad"
                 />
-                <label for="telefono">Telefono</label>
+                <label htmlFor="floatingCantidad">Cantidad</label>
               </div>
               <br />
+              <select className="form-select"
+                                id="talla"
+                                aria-label="Default select example"
+                                onChange={this.handleChange}
+                                value={this.state.talla}
+                                name='talla'
+                            >
+                                <option selected disabled>Talle</option>
+                                <option value="1">Small</option>
+                                <option value="2">Medium</option>
+                                <option value="2">Large</option>
+                                <option value="2">XLarge</option>
+                                
+                            </select>
+                            <br />
+              <div className="form-floating">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="floatingPrecio"
+                  placeholder="Precio"
+                  onChange={this.handleChange}
+                  value={this.state.precio_unitario}
+                  name="Precio_unitario"
+                />
+                <label htmlFor="floatingPrecio">Precio $</label>
+              </div>
               <br />
 
               <div className="form-floating">
                 <input
-                  type="email"
+                  type="text"
                   className="form-control"
-                  id="correo_electronico"
-                  placeholder="Email"
+                  id="fecha_pedido"
+                  placeholder="Fecha"
                   onChange={this.handleChange}
-                  value={this.state.correo_electronico}
-                  name="correo_electronico"
+                  value={this.state.fecha_del_pedido}
+                  name="fecha_del_pedido"
                 />
-                <label for="correo_electronico">Email</label>
+
+                <label htmlFor="fecha_del_pedido">Fecha</label>
               </div>
               <br />
-
-              <div className="form-floating">
-                <input
-                  type="number"
-                  className="form-control"
-                  id="floatingUsuarioId"
-                  placeholder="usuarioId"
-                  value={this.state.usuarioId}
-                
-                 
-                 
-              
-                  name="usuarioId"
-                />
-                <label for="usuarioId">Usuario Id</label>
-              </div>
               <br />
 
               <input
@@ -242,16 +210,16 @@ export class Internal_Clientes_Edit extends Component {
   }
 }
 
-export default Clientes_Edit;
+export default Pedidos_Edit;
 
-export function Clientes_Edit() {
+export function Pedidos_Edit() {
   const p = useParams();
 
   const navigate = useNavigate();
 
   return (
     <>
-      <Internal_Clientes_Edit navigate={navigate} params={p} />
+      <Internal_Pedidos_Edit navigate={navigate} params={p} />
     </>
   );
 }

@@ -14,7 +14,7 @@ const configuraciones = require("./config.json");
 
 const controladorCliente = require("./Controller/clienteController");
 const controladorUsuario = require("./Controller/usuarioController");
-//const controladorProveedor = require("./Controller/proveedorController");
+const controladorPedido = require("./Controller/pedidoController");
 const controladorProducto = require("./Controller/productoController");
 
 const securityController = require("./Controller/securityController");
@@ -22,7 +22,7 @@ app.use("/security", securityController.app);
 
 app.use("/cliente", controladorCliente);
 app.use("/usuario", controladorUsuario);
-//app.use('/proveedor', controladorProveedor);
+app.use("/pedido", controladorPedido);
 app.use("/producto", controladorProducto);
 
 app.listen(configuraciones.server.port, (err) => {

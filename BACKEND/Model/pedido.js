@@ -18,7 +18,7 @@ var pedidoDb = {};
 //crear pedido
 pedidoDb.create = function (pedido, funCallback) {
   consulta =
-    "INSERT INTO pedidos (cantidad, talla, precio_unitario, fecha_del_pedido) VALUES (?,?,?,?);";
+    "INSERT INTO pedidos (cantidad, talla, precio_unitario, fecha_del_pedido) VALUES (?,?,?,CURRENT_TIMESTAMP);";
   params = [
     pedido.cantidad,
     pedido.talla,
