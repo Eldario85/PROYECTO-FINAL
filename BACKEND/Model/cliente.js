@@ -135,30 +135,26 @@ clienteDb.borrar = function (id, funCallback) {
 };
 
 // personaController --> app.get('/:dni', getByDNI);
-clienteDb.getByApellido = function (apellido, funCallback) {
-  connection.query(
-    "SELECT * FROM cliente WHERE apellido = ?",
-    apellido,
-    (err, result) => {
-      if (err) {
-        funCallback({
-          menssage: "a ocurrido algun error inesperado al buscar el cliente",
-          detail: err,
-        });
-      } else if (result.length == 0) {
-        //consulta no impacta en nada dentro de la BD
-        funCallback(undefined, {
-          menssage: `no se encontro un cliente con el apellido: ${apellido}`,
-          detail: result,
-        });
-      } else {
-        funCallback(undefined, {
-          menssage: `los datos del cliente con el apellido ${apellido} son:`,
-          detail: result,
-        });
-      }
+clienteDb.getById = function (id, funCallback) {
+  connection.query("SELECT * FROM cliente WHERE id = ?", id, (err, result) => {
+    if (err) {
+      funCallback({
+        menssage: "a ocurrido algun error inesperado al buscar el cliente",
+        detail: err,
+      });
+    } else if (result.length == 0) {
+      //consulta no impacta en nada dentro de la BD
+      funCallback(undefined, {
+        menssage: `no se encontro un cliente con el id: ${id}`,
+        detail: result,
+      });
+    } else {
+      funCallback(undefined, {
+        menssage: `los datos del cliente con el id ${id} son:`,
+        detail: result,
+      });
     }
-  );
+  });
 };
 
 // personaController --> app.get('/:persona', getUserByPersona);

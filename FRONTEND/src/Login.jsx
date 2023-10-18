@@ -13,9 +13,9 @@ function InternalLogin({ navigate }) {
     event.preventDefault();
 
     const usuario = {
-      email,
-      nickname,
-      password,
+      email: email,
+      nickname: nickname,
+      password: password,
     };
 
     const endpoint = estaRegistrado
@@ -25,7 +25,7 @@ function InternalLogin({ navigate }) {
     const method = estaRegistrado ? "POST" : "POST";
 
     const parametros = {
-      method,
+      method: method,
       body: JSON.stringify(usuario),
       headers: {
         "Content-Type": "application/json",
@@ -33,16 +33,14 @@ function InternalLogin({ navigate }) {
     };
 
     fetch(endpoint, parametros)
-      .then((res) => {
-        return res.json().then((body) => {
-          return {
-            status: res.status,
-            ok: res.ok,
-            headers: res.headers,
-            body: body,
-          };
-        });
-      })
+      .then((res) =>
+        res.json().then((body) => ({
+          status: res.status,
+          ok: res.ok,
+          headers: res.headers,
+          body: body,
+        }))
+      )
       .then((result) => {
         if (result.ok) {
           if (estaRegistrado) {
@@ -86,7 +84,7 @@ function InternalLogin({ navigate }) {
           });
         }
       })
-      .catch((error) => {
+      .catch((error) =>
         toast.error(error.message, {
           position: "bottom-center",
           autoClose: 5000,
@@ -96,8 +94,8 @@ function InternalLogin({ navigate }) {
           draggable: true,
           progress: undefined,
           theme: "light",
-        });
-      });
+        })
+      );
   };
 
   return (
@@ -168,7 +166,7 @@ function InternalLogin({ navigate }) {
 }
 
 function Login() {
-  const p = useParams();
+  const { p } = useParams();
   const navigate = useNavigate();
 
   return (

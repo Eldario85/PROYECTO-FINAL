@@ -1,28 +1,16 @@
 require("rootpath")();
 const express = require("express");
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-var usuarioDb = require("../Model/usuario");
-
+const usuarioDb = require("../Model/usuario");
 const securityController = require("./securityController");
 
-// --------------------------------------------------------
-// --rutas de escucha (endpoint) dispoibles para USUARIOS--
-// --------------------------------------------------------
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", securityController.verificarToken, getAll);
 app.post("/", createUser);
 app.put("/:id_usuario", updateUser);
 app.delete("/:id_usuario", deleteUser);
-
-// --------------------------------------------------------
-// ---------FUNCIONES UTILIZADAS EN ENDPOINTS -------------
-// --------------------------------------------------------
-
-//req : datos enviados desde el frontend para que lo utilicemos
-//res : respuesta enviada desde el servidor al frontend
 
 function getAll(req, res) {
   usuarioDb.getAll((err, resultado) => {
@@ -35,7 +23,7 @@ function getAll(req, res) {
 }
 
 function createUser(req, res) {
-  let usuario = req.body;
+  const usuario = req.body;
   usuarioDb.create(usuario, (err, resultado) => {
     if (err) {
       res.status(500).send(err);
@@ -46,9 +34,9 @@ function createUser(req, res) {
 }
 
 function updateUser(req, res) {
-  let datos_usuario = req.body; //aquellos datos que quiero reemplazar, modificar, etc
-  let id_usaurio = req.params.id_usuario; //para identificarlo dentro de la base de datos
-  usuarioDb.update(datos_usuario, id_usaurio, (err, resultado) => {
+  const datos_usuario = req.body;
+  const id_usuario = req.params.id_usuario;
+  usuarioDb.update(datos_usuario, id_usuario, (err, resultado) => {
     if (err) {
       res.status(500).send(err);
     } else {
