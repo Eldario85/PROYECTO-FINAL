@@ -1,17 +1,17 @@
-// roothpath : manejo de rutas de otros modulos del proyecto
-// express : modulo que permite gestionar y lanzar servidores
+// roothpath: manejo de rutas de otros módulos del proyecto
+// express: módulo que permite gestionar y lanzar servidores
 require("rootpath")();
 const express = require("express");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-var clienteDb = require("../Model/cliente");
+const clienteDb = require("../Model/cliente");
 
 // --------------------------------------------------------
-// --rutas de escucha (endpoint) dispoibles para PERSONAS--
+// --rutas de escucha (endpoint) disponibles para PERSONAS--
 // --------------------------------------------------------
-app.get("/", BuscarTodos);
+app.get("/", buscarTodos);
 app.post("/", crear);
 app.put("/:id", actualizar);
 app.delete("/:id", borrar);
@@ -22,9 +22,9 @@ app.get("/usuario/:id", getUserByCliente);
 // ---------FUNCIONES UTILIZADAS EN ENDPOINTS -------------
 // --------------------------------------------------------
 
-//Listar todos los clientes
-function BuscarTodos(req, res) {
-  clienteDb.getAll(function (err, resultado) {
+// Listar todos los clientes
+function buscarTodos(req, res) {
+  clienteDb.getAll((err, resultado) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -33,10 +33,9 @@ function BuscarTodos(req, res) {
   });
 }
 
-// --------------------------------------------------------
 // Crear cliente
 function crear(req, res) {
-  let cliente = req.body;
+  const cliente = req.body;
   clienteDb.create(cliente, (err, resultado) => {
     if (err) {
       res.status(500).send(err);
@@ -46,11 +45,10 @@ function crear(req, res) {
   });
 }
 
-// --------------------------------------------------------
-//Actualizar cliente
+// Actualizar cliente
 function actualizar(req, res) {
-  let cliente = req.body;
-  let id = req.params.id;
+  const cliente = req.body;
+  const id = req.params.id;
   clienteDb.update(cliente, id, (err, resultado) => {
     if (err) {
       res.status(500).send(err);
@@ -60,10 +58,9 @@ function actualizar(req, res) {
   });
 }
 
-// --------------------------------------------------------
-//Borrar Cliente
+// Borrar Cliente
 function borrar(req, res) {
-  let id_persona_a_eliminar = req.params.id;
+  const id_persona_a_eliminar = req.params.id;
   clienteDb.borrar(id_persona_a_eliminar, (err, result_model) => {
     if (err) {
       res.status(500).send(err);
@@ -77,8 +74,7 @@ function borrar(req, res) {
   });
 }
 
-// --------------------------------------------------------
-//Buscar usuario por cliente
+// Buscar usuario por cliente
 function getUserByCliente(req, res) {
   clienteDb.getUserByCliente(req.params.id, (err, result_model) => {
     if (err) {
@@ -89,10 +85,9 @@ function getUserByCliente(req, res) {
   });
 }
 
-// --------------------------------------------------------
-//Buscar por Id
+// Buscar por Id
 function getById(req, res) {
-  let id = req.params.id;
+  const id = req.params.id;
   clienteDb.getById(id, (err, result_model) => {
     if (err) {
       res.status(500).send(err);

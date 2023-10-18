@@ -4,47 +4,43 @@ import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-export class Clientes extends Component {
+class Clientes extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       clientes: [],
+      //cliente: props.location.state.cliente,
       modal: false,
+      idToDelete: null,
     };
     this.handleClickDelete = this.handleClickDelete.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.showModal = this.showModal.bind(this);
   }
 
-  // funcion ejecutada al montar el componente, tras ejecutarse el render,
-  // este metodo realiza un fetch al endpoint listar()
-  // para traer el listado de vehiculos y setearlos en en estado "vehiculos"
   componentDidMount() {
     let parametros = {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        // authorization: sessionStorage.getItem("token"),
+        authorization: sessionStorage.getItem("token"),
       },
     };
 
     fetch("http://localhost:8000/cliente", parametros)
-      .then((res) => {
-        return res.json().then((body) => {
-          return {
-            status: res.status,
-            ok: res.ok,
-            headers: res.headers,
-            body: body,
-          };
-        });
-      })
+      .then((res) =>
+        res.json().then((body) => ({
+          status: res.status,
+          ok: res.ok,
+          headers: res.headers,
+          body: body,
+        }))
+      )
       .then((result) => {
         if (result.ok) {
           this.setState({
             clientes: result.body,
-            //siempre que se monta el componente el modal tiene que estar cerrado
             modal: false,
           });
         } else {
@@ -60,9 +56,7 @@ export class Clientes extends Component {
           });
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => console.log(error));
   }
 
   closeModal() {
@@ -87,19 +81,16 @@ export class Clientes extends Component {
         'Accept': "application/json",
       },
     };
-    //this.state.idToDelete se carga cuando abrimos el modal con showModal(vehiculo_id)
     const url = `http://localhost:8000/cliente/${this.state.idToDelete}`;
     fetch(url, parametros)
-      .then((res) => {
-        return res.json().then((body) => {
-          return {
-            status: res.status,
-            ok: res.ok,
-            headers: res.headers,
-            body: body,
-          };
-        });
-      })
+      .then((res) =>
+        res.json().then((body) => ({
+          status: res.status,
+          ok: res.ok,
+          headers: res.headers,
+          body: body,
+        }))
+      )
       .then((result) => {
         if (result.ok) {
           toast.success(result.body.message, {
@@ -112,7 +103,6 @@ export class Clientes extends Component {
             progress: undefined,
             theme: "light",
           });
-          //al finalizar la eliminacion volvemos a invocar el componentDidMount() para recargar nuestro listado
           this.componentDidMount();
         } else {
           toast.error(result.body.message, {
@@ -127,39 +117,38 @@ export class Clientes extends Component {
           });
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => console.log(error));
   }
 
   render() {
-    const filas = this.state.clientes.map((cliente, index) => {
-      return (
-        <tr key={index}>
-          <td>{cliente.nombre}</td>
-          <td>{cliente.apellido}</td>
-          <td>{cliente.direccion}</td>
-          <td>{cliente.telefono}</td>
-          <td>{cliente.correo_electronico}</td>
-          <td>{cliente.usuarioId}</td>
-          <td>
-            <Link
-              to={`/clientes/edit/${cliente.id}`}
-              className="btn btn-primary"
-            >
-              <span class="material-symbols-outlined">edit</span>
-            </Link>
+    const filas = this.state.clientes.map((cliente, index) => (
+      <tr key={index}>
+        <td>{cliente.nombre}</td>
+        <td>{cliente.apellido}</td>
+        <td>{cliente.direccion}</td>
+        <td>{cliente.telefono}</td>
+        <td>{cliente.correo_electronico}</td>
+        <td>{cliente.usuarioId}</td>
+        <td>
+          <Link
+            to={{
+              pathname: `/clientes/edit/${cliente.id}`,
+              state: { cliente },
+            }}
+            className="btn btn-primary"
+          >
+            <span className="material-symbols-outlined">edit</span>
+          </Link>
 
-            <button
-              className="btn btn-danger"
-              onClick={() => this.showModal(cliente.id)}
-            >
-              <span className="material-symbols-outlined">delete</span>
-            </button>
-          </td>
-        </tr>
-      );
-    });
+          <button
+            className="btn btn-danger"
+            onClick={() => this.showModal(cliente.id)}
+          >
+            <span className="material-symbols-outlined">delete</span>
+          </button>
+        </td>
+      </tr>
+    ));
     return (
       <>
         <div>

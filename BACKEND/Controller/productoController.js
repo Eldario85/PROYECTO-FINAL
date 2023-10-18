@@ -1,26 +1,35 @@
+// Importar el módulo rootpath para poder utilizar rutas relativas
 require("rootpath")();
+
+// Importar el módulo express
 const express = require("express");
+
+// Crear una instancia de express
 const app = express();
+
+// Utilizar el middleware de express.json()
 app.use(express.json());
+
+// Utilizar el middleware de express.urlencoded() con la opción extended en true
 app.use(express.urlencoded({ extended: true }));
 
-var productoDb = require("../Model/producto");
+// Importar el módulo producto del modelo
+const productoDb = require("../Model/producto");
+
+// Importar el módulo securityController
 const securityController = require("./securityController");
-// --------------------------------------------------------
-// --rutas de escucha (endpoint) dispoibles para PERSONAS--
-// --------------------------------------------------------
-app.get("/", BuscarTodos);
+
+// Definir las rutas de escucha (endpoint) disponibles para PERSONAS
+app.get("/", buscarTodos);
 app.post("/", crear);
 app.put("/:id", securityController.verificarToken, actualizar);
 app.delete("/:id", securityController.verificarToken, borrar);
 app.get("/:id", getById);
 
-// --------------------------------------------------------
-// ---------FUNCIONES UTILIZADAS EN ENDPOINTS -------------
-// --------------------------------------------------------
+// Definir las funciones utilizadas en los endpoints
 
-//Listar todos los productos
-function BuscarTodos(req, res) {
+// Listar todos los productos
+function buscarTodos(req, res) {
   productoDb.getAll(function (err, resultado) {
     if (err) {
       res.status(500).send(err);
@@ -30,7 +39,6 @@ function BuscarTodos(req, res) {
   });
 }
 
-// --------------------------------------------------------
 // Crear producto
 function crear(req, res) {
   let producto = req.body;
@@ -43,8 +51,7 @@ function crear(req, res) {
   });
 }
 
-// --------------------------------------------------------
-//Actualizar producto
+// Actualizar producto
 function actualizar(req, res) {
   let producto = req.body;
   let id = req.params.id;
@@ -57,8 +64,7 @@ function actualizar(req, res) {
   });
 }
 
-// --------------------------------------------------------
-//Borrar producto
+// Borrar producto
 function borrar(req, res) {
   let id_producto_a_eliminar = req.params.id;
   productoDb.borrar(id_producto_a_eliminar, (err, result_model) => {
@@ -74,6 +80,7 @@ function borrar(req, res) {
   });
 }
 
+// Obtener producto por id
 function getById(req, res) {
   let id = req.params.id;
   productoDb.getById(id, (err, result_model) => {
@@ -85,4 +92,5 @@ function getById(req, res) {
   });
 }
 
+// Exportar la instancia de express
 module.exports = app;
