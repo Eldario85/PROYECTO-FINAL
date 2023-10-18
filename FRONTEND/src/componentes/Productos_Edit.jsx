@@ -213,23 +213,7 @@ export class Internal_Productos_Edit extends Component {
               </div>
               <br />
 
-              {/* 
-                            <div className="form-floating">
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    id="ano"
-                                    placeholder="ano"
-                                    min="0"
-                                    max="2030"
-                                    data-bind="value:replyNumber"
-                                    onChange={this.handleChange}
-                                    value={this.state.ano}
-                                    name='ano'
-                                />
-                                <label for="ano">Año</label>
-                            </div> */}
-              <br />
+    
 
               <input
                 className="btn btn-primary"

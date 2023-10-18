@@ -15,7 +15,7 @@ app.get("/", BuscarTodos);
 app.post("/", crear);
 app.put("/:id", actualizar);
 app.delete("/:id", borrar);
-app.get("/:apellido", getByApellido);
+app.get("/:id", getById);
 app.get("/usuario/:id", getUserByCliente);
 
 // --------------------------------------------------------
@@ -90,10 +90,10 @@ function getUserByCliente(req, res) {
 }
 
 // --------------------------------------------------------
-//Buscar por apellido
-function getByApellido(req, res) {
-  let apellido = req.params.apellido;
-  clienteDb.getByApellido(apellido, (err, result_model) => {
+//Buscar por Id
+function getById(req, res) {
+  let id = req.params.id;
+  clienteDb.getById(id, (err, result_model) => {
     if (err) {
       res.status(500).send(err);
     } else {

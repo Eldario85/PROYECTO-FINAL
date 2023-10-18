@@ -18,14 +18,14 @@ var productoDb = {};
 //crear producto
 productoDb.create = function (producto, funCallback) {
   consulta =
-    "INSERT INTO producto (nombre, descripcion, precio, stock_disponible, imagen, talla) VALUES (?,?,?,?,?,?);";
+    "INSERT INTO producto (nombre, descripcion, precio, imagen) VALUES (?,?,?,?);";
   params = [
     producto.nombre,
     producto.descripcion,
     producto.precio,
-    producto.stock_disponible,
+    //producto.stock_disponible,
     producto.imagen,
-    producto.talla,
+    //producto.talla,
   ];
 
   connection.query(consulta, params, (err, rows) => {

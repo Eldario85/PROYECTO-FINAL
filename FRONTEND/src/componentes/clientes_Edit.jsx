@@ -13,7 +13,7 @@ export class Internal_Clientes_Edit extends Component {
       direccion: "",
       telefono: "",
       correo_electronico: "",
-      usuarioId: sessionStorage.getItem("id"),
+      usuarioId: "",
       modal: false,
     };
   }
@@ -52,7 +52,7 @@ export class Internal_Clientes_Edit extends Component {
               direccion: result.body.detail.direccion,
               telefono: result.body.detail.telefono,
               correo_electronico: result.body.detail.correo_electronico,
-              usuarioId: sessionStorage.getItem("id"),
+              usuarioId: result.body.detail.usuarioId,
             });
           } else {
             toast.error(result.body.message, {
@@ -85,7 +85,7 @@ export class Internal_Clientes_Edit extends Component {
       direccion: this.state.direccion,
       telefono: this.state.telefono,
       correo_electronico: this.state.correo_electronico,
-      usuarioId: sessionStorage.getItem("id"),
+      usuarioId: this.state.usuarioId,
     };
 
     let parametros = {
@@ -237,7 +237,7 @@ export class Internal_Clientes_Edit extends Component {
                   className="form-control"
                   id="floatingUsuarioId"
                   placeholder="usuarioId"
-                  value={sessionStorage.getItem("id")}
+                  value={this.state.usuarioId}
                   name="usuarioId"
                 />
 

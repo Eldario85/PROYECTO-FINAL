@@ -71,13 +71,14 @@ clienteDb.getAll = function (funCallback) {
 // personaController --> app.put('/', actualizar);
 clienteDb.update = function (cliente, id, funCallback) {
   const consulta =
-    "UPDATE cliente SET nombre =?, apellido= ?, direccion =?, telefono=?, correo_electronico=?  WHERE id = ?";
+    "UPDATE cliente SET nombre =?, apellido= ?, direccion =?, telefono=?, correo_electronico=?, usuarioId=?  WHERE id = ?";
   const params = [
     cliente.nombre,
     cliente.apellido,
     cliente.direccion,
     cliente.telefono,
     cliente.correo_electronico,
+    cliente.usuarioId,
     id,
   ];
 
@@ -135,10 +136,10 @@ clienteDb.borrar = function (id, funCallback) {
 };
 
 // personaController --> app.get('/:dni', getByDNI);
-clienteDb.getByApellido = function (apellido, funCallback) {
+clienteDb.getById = function (id, funCallback) {
   connection.query(
-    "SELECT * FROM cliente WHERE apellido = ?",
-    apellido,
+    "SELECT * FROM cliente WHERE id = ?",
+    id,
     (err, result) => {
       if (err) {
         funCallback({
@@ -148,12 +149,12 @@ clienteDb.getByApellido = function (apellido, funCallback) {
       } else if (result.length == 0) {
         //consulta no impacta en nada dentro de la BD
         funCallback(undefined, {
-          menssage: `no se encontro un cliente con el apellido: ${apellido}`,
+          menssage: `no se encontro un cliente con el id: ${id}`,
           detail: result,
         });
       } else {
         funCallback(undefined, {
-          menssage: `los datos del cliente con el apellido ${apellido} son:`,
+          menssage: `los datos del cliente con el id ${id} son:`,
           detail: result,
         });
       }
@@ -181,8 +182,8 @@ clienteDb.getUserByCliente = function (cliente, funcallback) {
         });
       } else {
         consulta =
-          "select nickname from usuario INNER JOIN cliente on usuario.id = cliente.usuarioId where usuario.id=?";
-        connection.query(consulta, persona, (err, result) => {
+          "select nickname, usuarioId from usuario INNER JOIN cliente on usuario.usuarioId = cliente.usuarioId where usuario.id=?";
+        connection.query(consulta, cliente, (err, result) => {
           if (err) {
             funcallback({
               menssage:

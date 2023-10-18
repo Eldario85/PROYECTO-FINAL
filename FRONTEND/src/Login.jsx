@@ -22,10 +22,10 @@ function InternalLogin({ navigate }) {
       ? "http://localhost:8000/usuario"
       : "http://localhost:8000/security/login";
 
-    const method = estaRegistrado ? "POST" : "POST";
+   // const method = estaRegistrado ? "POST" : "POST";
 
     const parametros = {
-      method,
+      method: "POST",
       body: JSON.stringify(usuario),
       headers: {
         "Content-Type": "application/json",

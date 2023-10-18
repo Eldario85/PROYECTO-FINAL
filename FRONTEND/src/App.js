@@ -25,7 +25,7 @@ function App() {
           <Route path="/clientes" element={<Clientes />}></Route>
           <Route path="/productos/edit" element={<Productos_Edit />} />
           <Route
-            path="/productos/edit/:producto_id"
+            path="/productos/edit/:id"
             element={<Productos_Edit />}
           />
         </Routes>
