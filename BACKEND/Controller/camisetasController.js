@@ -13,8 +13,8 @@ app.use(express.json());
 // Utilizar el middleware de express.urlencoded() con la opción extended en true
 app.use(express.urlencoded({ extended: true }));
 
-// Importar el módulo producto del modelo
-const productoDb = require("../Model/producto");
+// Importar el módulo camisetas del modelo
+const camisetasDb = require("../Model/camisetas");
 
 // Importar el módulo securityController
 const securityController = require("./securityController");
@@ -28,9 +28,9 @@ app.get("/:id", getById);
 
 // Definir las funciones utilizadas en los endpoints
 
-// Listar todos los productos
+// Listar todos los camisetass
 function buscarTodos(req, res) {
-  productoDb.getAll(function (err, resultado) {
+  camisetasDb.getAll(function (err, resultado) {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -39,10 +39,10 @@ function buscarTodos(req, res) {
   });
 }
 
-// Crear producto
+// Crear camisetas
 function crear(req, res) {
-  let producto = req.body;
-  productoDb.create(producto, (err, resultado) => {
+  let camisetas = req.body;
+  camisetasDb.create(camisetas, (err, resultado) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -51,11 +51,11 @@ function crear(req, res) {
   });
 }
 
-// Actualizar producto
+// Actualizar camisetas
 function actualizar(req, res) {
-  let producto = req.body;
+  let camisetas = req.body;
   let id = req.params.id;
-  productoDb.update(producto, id, (err, resultado) => {
+  camisetasDb.update(camisetas, id, (err, resultado) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -64,10 +64,10 @@ function actualizar(req, res) {
   });
 }
 
-// Borrar producto
+// Borrar camisetas
 function borrar(req, res) {
-  let id_producto_a_eliminar = req.params.id;
-  productoDb.borrar(id_producto_a_eliminar, (err, result_model) => {
+  let id_camisetas_a_eliminar = req.params.id;
+  camisetasDb.borrar(id_camisetas_a_eliminar, (err, result_model) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -80,10 +80,10 @@ function borrar(req, res) {
   });
 }
 
-// Obtener producto por id
+// Obtener camisetas por id
 function getById(req, res) {
   let id = req.params.id;
-  productoDb.getById(id, (err, result_model) => {
+  camisetasDb.getById(id, (err, result_model) => {
     if (err) {
       res.status(500).send(err);
     } else {

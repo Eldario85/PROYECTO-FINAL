@@ -2,8 +2,8 @@
     "database": {
         "host "    : "localhost",
         "user"     : "root",
-        "password" : "1234",
-        "database" : "integrador"
+        "password" : "dario",
+        "database" : "Integrador"
     },
     "server": {
         "port": 8000

@@ -26,7 +26,16 @@ funCallback: en una funcion que la enviamos desde el endpoint del controlador, e
 // usuarioController --> app.post('/', createUser);
 usuarioDb.create = function (usuario, funcallback) {
   // Verifica que los campos requeridos no estén vacíos
-  if (!usuario.email || !usuario.nickname || !usuario.password) {
+  if (
+    !usuario.email ||
+    !usuario.nickname ||
+    !usuario.password ||
+    !usuario.email ||
+    !usuario.nombre ||
+    !usuario.apellido ||
+    usuario.direccion ||
+    !usuario.telefono
+  ) {
     return funcallback({
       message: "Todos los campos son obligatorios.",
     });
@@ -36,8 +45,17 @@ usuarioDb.create = function (usuario, funcallback) {
   let claveCifrada = bcrypt.hashSync(usuario.password, 10);
 
   // Realiza la inserción en la base de datos
-  consulta = "INSERT INTO usuario (email, nickname, password) VALUES (?,?,?);";
-  params = [usuario.email, usuario.nickname, claveCifrada];
+  consulta =
+    "INSERT INTO usuarios (nickname, password, email, nombre, apellido, direccion, telefono) VALUES (?,?,?,?,?,?,?);";
+  params = [
+    usuario.nickname,
+    claveCifrada,
+    usuario.email,
+    usuario.nombre,
+    usuario.apellido,
+    usuario.direccion,
+    usuario.telefono,
+  ];
   connection.query(consulta, params, (err, detail_bd) => {
     if (err) {
       if (err.code == "ER_DUP_ENTRY") {
@@ -65,7 +83,7 @@ usuarioDb.create = function (usuario, funcallback) {
 //R = READ
 // usuarioController --> app.get('/', getAll);
 usuarioDb.getAll = function (funCallback) {
-  var consulta = "SELECT * FROM usuario";
+  var consulta = "SELECT * FROM usuarios";
   connection.query(consulta, function (err, rows) {
     if (err) {
       funCallback(err);
@@ -80,17 +98,21 @@ usuarioDb.getAll = function (funCallback) {
 
 //U = UPDATE
 // usuarioController --> app.put('/:id_usuario', updateUser);
-usuarioDb.update = function (datos_usuario, id_usaurio, funcallback) {
+usuarioDb.update = function (usuario, id_usaurio, funcallback) {
   let claveCifrada = bcrypt.hashSync(datos_usuario.clave, 10);
 
   const params = [
-    datos_usuario.email,
-    datos_usuario.nickname,
+    usuario.nickname,
     claveCifrada,
+    usuario.email,
+    usuario.nombre,
+    usuario.apellido,
+    usuario.direccion,
+    usuario.telefono,
     id_usaurio,
   ];
   const consulta =
-    "UPDATE usuario set email = ?, nickname = ?, password = ? WHERE id = ?;";
+    "UPDATE usuarios set nickname = ?, password = ?, email = ?, nombre=?, apellido=?,direccion=?,telefono=?, WHERE id = ?;";
 
   connection.query(consulta, params, (err, result) => {
     if (err) {
@@ -127,7 +149,7 @@ usuarioDb.update = function (datos_usuario, id_usaurio, funcallback) {
 // D = DELETE
 // usuarioController --> app.delete('/:id_usuario', deleteUser);
 usuarioDb.borrar = function (id, funCallback) {
-  consulta = "DELETE FROM USUARIO WHERE id = ?";
+  consulta = "DELETE FROM USUARIOs WHERE id = ?";
   connection.query(consulta, id, (err, result) => {
     if (err) {
       funCallback({ menssage: err.code, detail: err }, undefined);
@@ -151,7 +173,7 @@ usuarioDb.borrar = function (id, funCallback) {
 
 //securityController --> app.post('/login', login);
 usuarioDb.findByNickname = function (nickname, funCallback) {
-  var consulta = "SELECT * FROM usuario WHERE nickname = ?";
+  var consulta = "SELECT * FROM usuarios WHERE nickname = ?";
   connection.query(consulta, nickname, function (err, result) {
     if (err) {
       funCallback(err);
