@@ -102,3 +102,8 @@ INSERT INTO `integrador`.`tallas` (`talla_id`, `talla`) VALUES ('1', 'S');
 INSERT INTO `integrador`.`tallas` (`talla_id`, `talla`) VALUES ('2', 'M');
 INSERT INTO `integrador`.`tallas` (`talla_id`, `talla`) VALUES ('3', 'L');
 INSERT INTO `integrador`.`tallas` (`talla_id`, `talla`) VALUES ('4', 'XL');
+
+ALTER TABLE `integrador`.`usuarios` 
+ADD UNIQUE INDEX `nickname_UNIQUE` (`nickname` ASC) VISIBLE,
+ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE;
+;

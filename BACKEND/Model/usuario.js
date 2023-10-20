@@ -30,10 +30,9 @@ usuarioDb.create = function (usuario, funcallback) {
     !usuario.email ||
     !usuario.nickname ||
     !usuario.password ||
-    !usuario.email ||
     !usuario.nombre ||
     !usuario.apellido ||
-    usuario.direccion ||
+    !usuario.direccion ||
     !usuario.telefono
   ) {
     return funcallback({
@@ -48,9 +47,10 @@ usuarioDb.create = function (usuario, funcallback) {
   consulta =
     "INSERT INTO usuarios (nickname, password, email, nombre, apellido, direccion, telefono) VALUES (?,?,?,?,?,?,?);";
   params = [
+    usuario.email,
     usuario.nickname,
     claveCifrada,
-    usuario.email,
+
     usuario.nombre,
     usuario.apellido,
     usuario.direccion,
